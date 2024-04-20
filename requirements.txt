@@ -1,3 +1,5 @@
-python-telegram-bot
+python-telegram-bot[callback-data]
 pylib-0xe
+telegram
+pydantic
 
