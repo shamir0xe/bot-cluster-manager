@@ -1,8 +1,8 @@
 from __future__ import annotations
 
 from telegram import InlineKeyboardMarkup
-from generators.base_generator import BaseGenerator
-from models.state import State
+from src.generators.base_generator import BaseGenerator
+from src.models.state import State
 
 
 class KeyboardGenerator(BaseGenerator):

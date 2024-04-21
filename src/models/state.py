@@ -1,7 +1,7 @@
 from __future__ import annotations
 from pydantic import BaseModel
 
-from types.response_types import ResponseTypes
+from src.types.response_types import ResponseTypes
 
 
 class State(BaseModel):

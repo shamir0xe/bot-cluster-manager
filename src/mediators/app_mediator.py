@@ -23,6 +23,6 @@ class AppMediator:
     def run_bot(self) -> None:
         print(self.arg_data)
         bot_id = self.arg_data.bot_id
-        bot_name = BotModulePathMapper.run(bot_id)
+        bot_name = BotModulePathMapper.map(bot_id)
         bot_module = importlib.import_module(bot_name)
         bot_module.main()

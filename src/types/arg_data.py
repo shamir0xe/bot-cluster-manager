@@ -3,7 +3,7 @@ from typing import Any
 from pylib_0xe.data.data_transfer_object import DataTransferObject
 
 
-@dataclass()
+@dataclass
 class ArgData(DataTransferObject):
     bot_id: int = -1
 

@@ -1,0 +1,4 @@
+{
+  "available_vars": ["bot_name", "data", "datetime", "username"],
+  "path": "src.variables.{}"
+}

@@ -1,7 +1,7 @@
 from pydantic import BaseModel
 
 
-class UserData(BaseModel):
+class StateData(BaseModel):
     parent_id: int = -1
     state_id: int = 0
     data: str = ""

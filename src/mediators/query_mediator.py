@@ -1,6 +1,6 @@
 from __future__ import annotations
 from dataclasses import dataclass
-from typing import Optional
+from typing import List, Optional
 from telegram import InlineKeyboardMarkup, Update
 from telegram.ext import ContextTypes
 
@@ -10,15 +10,16 @@ from src.actions.message_reply import MessageReply
 from src.generators.content_generator import ContentGenerator
 from src.generators.keyboard_generator import KeyboardGenerator
 from src.models.state import State
-from src.models.user_data import UserData
+from src.models.state_data import StateData
 from src.types.entry_types import EntryTypes
 from src.types.response_types import ResponseTypes
+from src.types.variable import Variable
 
 
 @dataclass
 class QueryMediator:
     state: State
-    user_data: UserData
+    state_data: StateData
     entry_type: EntryTypes
     update: Update
     content: str = ""
@@ -28,13 +29,13 @@ class QueryMediator:
     def from_callback(
         cls, update: Update, context: ContextTypes.DEFAULT_TYPE
     ) -> QueryMediator:
-        user_data = UserData()
+        state_data = StateData()
         if isinstance(context.user_data, dict):
-            user_data = UserData(**context.user_data)
+            state_data = StateData(**context.user_data)
 
         mediator = cls(
-            state=State.build_with(bot_id=6, state_id=user_data.state_id),
-            user_data=user_data,
+            state=State.build_with(bot_id=6, state_id=state_data.state_id),
+            state_data=state_data,
             update=update,
             entry_type=EntryTypes.CALLBACK,
         )
@@ -52,10 +53,13 @@ class QueryMediator:
         ## Save data as ...
         return self
 
-    def create_content(self) -> QueryMediator:
+    def create_content(self, variables: List[Variable]) -> QueryMediator:
         ## Creating the display content based on the state and user_data
         self.content = ContentGenerator.with_state(
-            self.state, user_data=self.user_data
+            state=self.state,
+            state_data=self.state_data,
+            variables=variables,
+            user=self.update.effective_user,
         ).generate()
         return self
 
