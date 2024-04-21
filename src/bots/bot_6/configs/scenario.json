@@ -1,17 +1,78 @@
 {
-  "states": [
+  "pages": [
     {
-      "id": 0,
+      "name": "start",
       "content": "Salam bar <:username> e aziz, man <:bot_name> hastam\ntaarikh e emrooz <:datetime> e.\ndata ye marhaleye ghabl ham <:data> ast",
-      "buttons": [
-          {
-              "text": "btn 1"
-          }
-      ]
+      "keyboard": {
+        "buttons": [
+          [
+            {
+              "text": "boro be page e ?",
+              "fn": [
+                { "hyp": ["<:username>", "==", "shamir0xe"], "con": "s1" },
+                { "hyp": ["<:data>", "==", "5"], "con": "s2" },
+                { "con": "s3" }
+              ]
+            },
+            {
+              "text": "ajibe",
+              "fn": [
+                { "hyp": ["<:username>", "==", "mimdarabi"], "con": "s1" },
+                { "hyp": ["<:data>", "==", "5"], "con": "s2" },
+                { "con": "s3" }
+              ]
+            }
+          ],
+          [
+            {
+              "text": "ye kelid e gonde :))",
+              "fn": [{ "con": "s2" }]
+            }
+          ]
+        ]
+      }
     },
     {
-      "id": 1,
-      "content": "In masalan page e ba'die :)"
+      "name": "s1",
+      "content": "In masalan page e <:state_name> :)",
+      "keyboard": {
+        "buttons": [
+          [
+            {
+              "text": "bargard be avali",
+              "fn": [{ "con": "start" }]
+            }
+          ]
+        ]
+      }
+    },
+    {
+      "name": "s2",
+      "content": "In masalan page e <:state_name> :)",
+      "keyboard": {
+        "buttons": [
+          [
+            {
+              "text": "bargard be avali",
+              "fn": [{ "con": "start" }]
+            }
+          ]
+        ]
+      }
+    },
+    {
+      "name": "s3",
+      "content": "In masalan page e <:state_name> :)",
+      "keyboard": {
+        "buttons": [
+          [
+            {
+              "text": "bargard be avali",
+              "fn": [{ "con": "start" }]
+            }
+          ]
+        ]
+      }
     }
   ]
 }

@@ -4,6 +4,7 @@ from typing import List, Optional
 from telegram import InlineKeyboardMarkup, Update
 from telegram.ext import ContextTypes
 
+from finders.page_finder import PageFinder
 from src.actions.user_data_updater import UserDataUpdater
 from src.actions.answer_callback import AnswerCallback
 from src.actions.message_edit import MessageEdit
@@ -37,7 +38,7 @@ class QueryMediator:
             entry_type=EntryTypes.COMMAND,
             update=update,
         )
-        return mediator 
+        return mediator
 
     @classmethod
     def from_callback(
@@ -53,6 +54,10 @@ class QueryMediator:
             entry_type=EntryTypes.CALLBACK,
         )
         return mediator
+
+    def detect_page(self) -> QueryMediator:
+        self.page = PageFinder.with_state(self.state_data)
+        return self
 
     def validate_data(self) -> QueryMediator:
         ## Validate the returned result
@@ -70,6 +75,7 @@ class QueryMediator:
         ## Creating the display content based on the state and user_data
         self.content = ContentGenerator.with_state(
             state_data=self.state_data,
+            page=self.page,
             variables=variables,
             user=self.update.effective_user,
         ).generate()
@@ -77,7 +83,13 @@ class QueryMediator:
 
     def create_keyboard(self) -> QueryMediator:
         ## Deciding each function to do what
-        self.keyboard = KeyboardGenerator.with_state(self.state_data).generate()
+        self.keyboard = (
+            KeyboardGenerator.with_state(
+                state_data=self.state_data, keyboard_data=self.page.keyboard
+            )
+            .evaluate_functions()
+            .generate()
+        )
         return self
 
     async def answer(self) -> QueryMediator:

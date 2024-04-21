@@ -7,9 +7,8 @@ from src.types.variable import Variable
 class ApplyVariables:
     @staticmethod
     def with_content(
-        variables: List[Variable],
         template: str,
-        bot_id: int,
+        variables: List[Variable],
         state_data: StateData,
         user: Optional[User],
     ) -> str:
@@ -18,7 +17,7 @@ class ApplyVariables:
             length = len(var.pattern)
             idx = content.find(var.pattern)
             if idx > 0:
-                new_str = var.callback(data=state_data.data, user=user, bot_id=bot_id)
+                new_str = var.callback(state_data=state_data, user=user)
                 bidx = 0
                 while idx > bidx + len(new_str):
                     content = content[:idx] + new_str + content[idx + length :]

@@ -1,5 +1,4 @@
-from typing import Optional
-from telegram import User
+from src.models.state_data import StateData
 from src.types.variable import Variable
 
 
@@ -7,6 +6,6 @@ class DataVariable(Variable):
     pattern = "<:data>"
 
     @staticmethod
-    def callback(data: str = "", **kargs) -> str:
-        return data
+    def callback(state_data: StateData = StateData(), **kargs) -> str:
+        return state_data.data
 
