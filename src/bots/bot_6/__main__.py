@@ -1,10 +1,12 @@
 from __future__ import annotations
 import logging
+from src.actions.user_data_updater import UserDataUpdater
+from src.models.state_data import StateData
 from src.mediators.query_mediator import QueryMediator
 from src.mediators.variable_mediator import VariableMediator
 from src.helpers.config.bot_config import BotConfig
 from src.types.bot_env_data import BotEnvData
-from typing import Any, Dict, Tuple
+from src.types.response_types import ResponseTypes
 
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Update
 from telegram.ext import (
@@ -15,6 +17,7 @@ from telegram.ext import (
     MessageHandler,
     filters,
 )
+
 
 # Enable logging
 logging.basicConfig(
@@ -40,8 +43,13 @@ class Bot_6:
         return self
 
     async def start(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
+        # starting a fresh user_data
+        UserDataUpdater.update(
+            context, StateData(bot_id=6, response_type=ResponseTypes.MESSAGE)
+        )
         self.update = update
         self.context = context
+        # print(f"user_data: {self.context.user_data}")
         await self.procedure(QueryMediator.from_command(update, context))
 
     async def stop(self, update: Update, context: ContextTypes.DEFAULT_TYPE):

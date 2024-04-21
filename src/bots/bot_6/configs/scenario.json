@@ -2,7 +2,12 @@
   "states": [
     {
       "id": 0,
-      "content": "Salam bar <:username> e aziz, man <:bot_name> hastam"
+      "content": "Salam bar <:username> e aziz, man <:bot_name> hastam\ntaarikh e emrooz <:datetime> e.\ndata ye marhaleye ghabl ham <:data> ast",
+      "buttons": [
+          {
+              "text": "btn 1"
+          }
+      ]
     },
     {
       "id": 1,

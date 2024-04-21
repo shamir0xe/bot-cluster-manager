@@ -1,5 +1,5 @@
 from pydantic import BaseModel
-from types.response_types import ResponseTypes
+from src.types.response_types import ResponseTypes
 
 
 class StateData(BaseModel):

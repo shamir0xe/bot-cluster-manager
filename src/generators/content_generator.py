@@ -34,8 +34,7 @@ class ContentGenerator(BaseGenerator):
         ## Call database in production instead of reading json
         self.template = Config(
             base_folder=f"src.bots.bot_{self.bot_id}.configs",
-        ).read(f"scenario.states[{self.state_id}].content")
-        print(f"have read the template: {self.template}")
+        ).read(f"scenario.states.__{self.state_id}.content")
         return self
 
     def apply_variables(self) -> ContentGenerator:

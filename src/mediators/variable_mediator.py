@@ -18,11 +18,10 @@ class VariableMediator:
         self.variables = []
         for var_name in self.var_names:
             path, class_name = VariableModulePathMapper.map(var_name)
-            print(f"Path for the {var_name}: {path}")
-            print(f"Searhcing for {class_name}")
             module = importlib.import_module(path)
             variable_class = getattr(module, class_name)
-            self.variables.append(variable_class())
+            var = variable_class()
+            self.variables.append(var)
         return self
 
     def get_variables(self) -> List[Variable]:

@@ -4,6 +4,7 @@ from typing import List, Optional
 from telegram import InlineKeyboardMarkup, Update
 from telegram.ext import ContextTypes
 
+from src.actions.user_data_updater import UserDataUpdater
 from src.actions.answer_callback import AnswerCallback
 from src.actions.message_edit import MessageEdit
 from src.actions.message_reply import MessageReply
@@ -95,5 +96,5 @@ class QueryMediator:
         return self
 
     def update_user_data(self, context: ContextTypes.DEFAULT_TYPE) -> QueryMediator:
-        context.user_data = self.state_data
+        UserDataUpdater.update(context, self.state_data)
         return self
