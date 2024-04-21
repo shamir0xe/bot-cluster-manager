@@ -40,7 +40,9 @@ class Bot_6:
         return self
 
     async def start(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
-        pass
+        self.update = update
+        self.context = context
+        await self.procedure(QueryMediator.from_command(update, context))
 
     async def stop(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
         pass
@@ -49,13 +51,18 @@ class Bot_6:
         pass
 
     async def callback_query(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
-        mediator = QueryMediator.from_callback(update, context)
-        mediator = mediator.validate_data()
-        mediator = mediator.map_data()
-        mediator = mediator.store_data()
-        mediator = mediator.create_content(self.variables)
-        mediator = mediator.create_keyboard()
-        mediator = await mediator.answer()
+        self.update = update
+        self.context = context
+        await self.procedure(QueryMediator.from_callback(update, context))
+
+    async def procedure(self, query_mediator: QueryMediator):
+        query_mediator.validate_data()
+        query_mediator.map_data()
+        query_mediator.store_data()
+        query_mediator.create_content(self.variables)
+        query_mediator.create_keyboard()
+        await query_mediator.answer()
+        query_mediator.update_user_data(self.context)
 
     async def message_query(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
         pass

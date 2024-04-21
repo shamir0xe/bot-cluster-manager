@@ -2,5 +2,6 @@ from enum import Enum
 
 
 class EntryTypes(Enum):
-    CALLBACK = "callback"
+    COMMAND = "command"
     MESSAGE = "message"
+    CALLBACK = "callback"

@@ -5,7 +5,6 @@ from telegram import User
 from src.actions.apply_variables import ApplyVariables
 from src.generators.base_generator import BaseGenerator
 from src.helpers.config.config import Config
-from src.models.state import State
 from src.models.state_data import StateData
 from src.types.variable import Variable
 
@@ -23,13 +22,12 @@ class ContentGenerator(BaseGenerator):
     @classmethod
     def with_state(
         cls,
-        state: State,
         state_data: StateData,
         variables: List[Variable],
         user: Optional[User],
     ) -> ContentGenerator:
-        state_id = state.state_id
-        bot_id = state.bot_id
+        state_id = state_data.state_id
+        bot_id = state_data.bot_id
         return cls(state_id, bot_id, state_data, variables, user)
 
     def fetch_template(self) -> ContentGenerator:
