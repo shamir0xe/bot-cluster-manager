@@ -1,5 +1,6 @@
 from __future__ import annotations
 import logging
+from typing import Dict
 from src.actions.user_data_updater import UserDataUpdater
 from src.models.state_data import StateData
 from src.mediators.query_mediator import QueryMediator
@@ -8,7 +9,7 @@ from src.helpers.config.bot_config import BotConfig
 from src.types.bot_env_data import BotEnvData
 from src.types.response_types import ResponseTypes
 
-from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Update
+from telegram import Update
 from telegram.ext import (
     Application,
     CallbackQueryHandler,
@@ -17,6 +18,8 @@ from telegram.ext import (
     MessageHandler,
     filters,
 )
+
+from src.types.variable import Variable
 
 
 # Enable logging
@@ -31,6 +34,7 @@ logger = logging.getLogger(__name__)
 
 class Bot_6:
     env: BotEnvData
+    variables: Dict[str, Variable]
 
     def read_environments(self) -> Bot_6:
         self.env = BotEnvData.from_dict(BotConfig(__file__).read("env"))
@@ -64,11 +68,12 @@ class Bot_6:
         await self.procedure(QueryMediator.from_callback(update, context))
 
     async def procedure(self, query_mediator: QueryMediator):
+        query_mediator.detect_page()
         query_mediator.validate_data()
         query_mediator.map_data()
         query_mediator.store_data()
         query_mediator.create_content(self.variables)
-        query_mediator.create_keyboard()
+        query_mediator.create_keyboard(self.variables)
         await query_mediator.answer()
         query_mediator.update_user_data(self.context)
 

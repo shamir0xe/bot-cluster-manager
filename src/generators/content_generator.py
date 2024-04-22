@@ -1,6 +1,6 @@
 from __future__ import annotations
 from dataclasses import dataclass
-from typing import List, Optional
+from typing import Dict, List, Optional
 from telegram import User
 from src.models.page import Page
 from src.finders.page_finder import PageFinder
@@ -15,7 +15,7 @@ from src.types.variable import Variable
 class ContentGenerator(BaseGenerator):
     page: Page
     state_data: StateData
-    variables: List[Variable]
+    variables: Dict[str, Variable]
     user: Optional[User] = None
     template: str = ""
     content: str = ""
@@ -25,7 +25,7 @@ class ContentGenerator(BaseGenerator):
         cls,
         state_data: StateData,
         page: Page,
-        variables: List[Variable],
+        variables: Dict[str, Variable],
         user: Optional[User],
     ) -> ContentGenerator:
         return cls(page, state_data, variables, user)

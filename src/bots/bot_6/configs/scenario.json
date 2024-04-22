@@ -2,16 +2,16 @@
   "pages": [
     {
       "name": "start",
-      "content": "Salam bar <:username> e aziz, man <:bot_name> hastam\ntaarikh e emrooz <:datetime> e.\ndata ye marhaleye ghabl ham <:data> ast",
+      "content": "Salam bar <:username> e aziz, man <:bot_name> hastam\nemsaasl saal e <:datetime.year> e milaadie.\ndata ye marhaleye ghabl ham <:data> ast",
       "keyboard": {
         "buttons": [
           [
             {
               "text": "boro be page e ?",
               "fn": [
-                { "hyp": ["<:username>", "==", "shamir0xe"], "con": "s1" },
+                { "hyp": ["<:username>", "==", "shamir0xe"], "con": "s3" },
                 { "hyp": ["<:data>", "==", "5"], "con": "s2" },
-                { "con": "s3" }
+                { "con": "s1" }
               ]
             },
             {

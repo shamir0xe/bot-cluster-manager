@@ -3,7 +3,7 @@ from src.types.variable import Variable
 
 
 class DataVariable(Variable):
-    pattern = "<:data>"
+    name = "data"
 
     @staticmethod
     def callback(state_data: StateData = StateData(), **kargs) -> str:

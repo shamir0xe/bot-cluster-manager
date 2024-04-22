@@ -3,11 +3,15 @@ from dataclasses import dataclass
 
 
 class Variable(ABC):
-    pattern: str = ""
+    name: str = ""
 
     def __init_subclass__(cls) -> None:
-        if cls.pattern == "":
+        if cls.name == "":
             raise NotImplementedError("Subclass must override 'name' attribute")
+
+    @property
+    def pattern(self) -> str:
+        return f"<:{self.name}>"
 
     @staticmethod
     @abstractmethod
@@ -16,4 +20,3 @@ class Variable(ABC):
 
     def __str__(self) -> str:
         return f"variable: {self.__class__}, pattern: {self.pattern}"
-

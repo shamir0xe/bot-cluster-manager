@@ -4,7 +4,7 @@ from src.types.variable import Variable
 
 
 class BotNameVariable(Variable):
-    pattern = "<:bot_name>"
+    name = "bot_name"
 
     @staticmethod
     def callback(state_data: StateData = StateData.default(), **kwargs) -> str:

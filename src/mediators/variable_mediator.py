@@ -1,5 +1,5 @@
 from __future__ import annotations
-from typing import List
+from typing import Dict, List
 import importlib
 
 from src.actions.variable_module_path_mapper import VariableModulePathMapper
@@ -24,5 +24,8 @@ class VariableMediator:
             self.variables.append(var)
         return self
 
-    def get_variables(self) -> List[Variable]:
-        return self.variables
+    def get_variables(self) -> Dict[str, Variable]:
+        vars = {}
+        for var in self.variables:
+            vars[var.name] = var
+        return vars

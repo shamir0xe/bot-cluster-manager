@@ -1,11 +1,10 @@
-from datetime import datetime
 from typing import Optional
 from telegram import User
 from src.types.variable import Variable
 
 
 class UsernameVariable(Variable):
-    pattern = "<:username>"
+    name = "username"
 
     @staticmethod
     def callback(user: Optional[User] = None, **kwargs) -> str:

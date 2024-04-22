@@ -1,4 +1,4 @@
-from typing import List, Optional
+from typing import Dict, List, Optional
 from telegram import User
 from src.models.state_data import StateData
 from src.types.variable import Variable
@@ -8,20 +8,36 @@ class ApplyVariables:
     @staticmethod
     def with_content(
         template: str,
-        variables: List[Variable],
+        variables: Dict[str, Variable],
         state_data: StateData,
         user: Optional[User],
     ) -> str:
-        content = template
-        for var in variables:
-            length = len(var.pattern)
-            idx = content.find(var.pattern)
-            if idx > 0:
-                new_str = var.callback(state_data=state_data, user=user)
-                bidx = 0
-                while idx > bidx + len(new_str):
-                    content = content[:idx] + new_str + content[idx + length :]
-                    bidx = idx
-                    idx = content.find(var.pattern)
-        print(f"after edit: content = {content}")
+        content = ""
+        in_var_name = False
+        i = 0
+        sz = len(template)
+        var = ""
+        while i < sz:
+            if in_var_name:
+                if template[i] != ">":
+                    var += template[i]
+                else:
+                    # end of the variable name
+                    variable = var.split(".")[0]
+                    args = var.split(".")[1:]
+                    content += variables[variable].callback(
+                        *args, state_data=state_data, user=user
+                    )
+                    var = ""
+                    in_var_name = False
+                i += 1
+                continue
+            else:
+                if template[i : i + 2] == "<:":
+                    in_var_name = True
+                    i += 2
+                    continue
+                content += template[i]
+                i += 1
+
         return content

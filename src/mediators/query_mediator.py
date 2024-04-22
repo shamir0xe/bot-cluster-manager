@@ -1,10 +1,10 @@
 from __future__ import annotations
 from dataclasses import dataclass
-from typing import List, Optional
+from typing import Dict, List, Optional
 from telegram import InlineKeyboardMarkup, Update
 from telegram.ext import ContextTypes
 
-from finders.page_finder import PageFinder
+from src.finders.page_finder import PageFinder
 from src.actions.user_data_updater import UserDataUpdater
 from src.actions.answer_callback import AnswerCallback
 from src.actions.message_edit import MessageEdit
@@ -47,6 +47,10 @@ class QueryMediator:
         state_data = StateData()
         if isinstance(context.user_data, dict):
             state_data = StateData(**context.user_data)
+        if update.callback_query and update.callback_query.data:
+            state_data.name = update.callback_query.data
+            state_data.response_type = ResponseTypes.EDIT_TEXT
+            print(f"daaram miram be {state_data.name}")
 
         mediator = cls(
             state_data=state_data,
@@ -71,7 +75,7 @@ class QueryMediator:
         ## Save data as ...
         return self
 
-    def create_content(self, variables: List[Variable]) -> QueryMediator:
+    def create_content(self, variables: Dict[str, Variable]) -> QueryMediator:
         ## Creating the display content based on the state and user_data
         self.content = ContentGenerator.with_state(
             state_data=self.state_data,
@@ -81,13 +85,16 @@ class QueryMediator:
         ).generate()
         return self
 
-    def create_keyboard(self) -> QueryMediator:
+    def create_keyboard(self, variables: Dict[str, Variable]) -> QueryMediator:
         ## Deciding each function to do what
         self.keyboard = (
-            KeyboardGenerator.with_state(
-                state_data=self.state_data, keyboard_data=self.page.keyboard
+            KeyboardGenerator(
+                state_data=self.state_data,
+                keyboard_data=self.page.keyboard,
+                user=self.update.effective_user,
+                variables=variables,
             )
-            .evaluate_functions()
+            .evaluate_layout()
             .generate()
         )
         return self
