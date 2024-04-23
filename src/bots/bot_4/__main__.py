@@ -73,6 +73,7 @@ async def gender(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
 
 async def photo(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
     """Stores the photo and asks for a location."""
+    logger.info("here we call message handler again, %s", "photo")
     user = update.message.from_user
     photo_file = await update.message.photo[-1].get_file()
     print(photo_file)
@@ -99,6 +100,7 @@ async def skip_photo(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
 
 async def location(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
     """Stores the location and asks for some info about the user."""
+    logger.info("here we call message handler again, %s", "location")
     user = update.message.from_user
     user_location = update.message.location
     logger.info(

@@ -1,6 +1,7 @@
 from __future__ import annotations
 import logging
 from typing import Dict
+from src.mediators.message_query_mediator import MessageQueryMediator
 from src.actions.user_data_updater import UserDataUpdater
 from src.models.state_data import StateData
 from src.mediators.query_mediator import QueryMediator
@@ -78,6 +79,13 @@ class Bot_6:
         query_mediator.update_user_data(self.context)
 
     async def message_query(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
+        self.update = update
+        self.context = context
+        await self.procedure(
+            MessageQueryMediator.build(update, context).craft_state(self.variables)
+        )
+
+    async def photo_query(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
         pass
 
     def run(self) -> None:
@@ -92,6 +100,7 @@ class Bot_6:
         application.add_handler(
             MessageHandler(filters.TEXT & ~filters.COMMAND, self.message_query)
         )
+        application.add_handler(MessageHandler(filters.PHOTO, self.photo_query))
 
         # Run the bot until the user presses Ctrl-C
         application.run_polling(allowed_updates=Update.ALL_TYPES)

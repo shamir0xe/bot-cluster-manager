@@ -2,7 +2,24 @@
   "pages": [
     {
       "name": "start",
-      "content": "Salam bar <:username> e aziz, man <:bot_name> hastam\nemsaasl saal e <:datetime.year> e milaadie.\ndata ye marhaleye ghabl ham <:data> ast",
+      "content": "Salam bar <:username> e aziz, man <:bot_name> hastam\nemsaasl saal e <:datetime.year> e milaadie.\ndata ye in marhale ham <:data.start_text> ast",
+      "flow": {
+        "text": {
+          "fn": [{ "con": "gpage" }]
+        },
+        "photo": {
+          "name": "start_img",
+          "fn": [{ "con": "gpage" }]
+        },
+        "video": {
+          "name": "start_video",
+          "fn": [{ "con": "gpage" }]
+        },
+        "location": {
+          "name": "start_location",
+          "fn": [{ "con": "gpage" }]
+        }
+      },
       "keyboard": {
         "buttons": [
           [
@@ -27,6 +44,20 @@
             {
               "text": "ye kelid e gonde :))",
               "fn": [{ "con": "s2" }]
+            }
+          ]
+        ]
+      }
+    },
+    {
+      "name": "gpage",
+      "content": "Merci baraaye be eshteraak gozaariye <:parent.response_type>",
+      "keyboard": {
+        "buttons": [
+          [
+            {
+              "text": "bargard be jaayi ke oomadi",
+              "fn": [{ "con": "<:parent.name>" }]
             }
           ]
         ]

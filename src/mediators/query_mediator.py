@@ -4,6 +4,8 @@ from typing import Dict, List, Optional
 from telegram import InlineKeyboardMarkup, Update
 from telegram.ext import ContextTypes
 
+from src.actions.load_callback_response import LoadCallbackResponse
+from src.models.parent_page import ParentPage
 from src.finders.page_finder import PageFinder
 from src.actions.user_data_updater import UserDataUpdater
 from src.actions.answer_callback import AnswerCallback
@@ -29,10 +31,7 @@ class QueryMediator:
     def from_command(
         cls, update: Update, context: ContextTypes.DEFAULT_TYPE
     ) -> QueryMediator:
-        state_data = StateData()
-        if isinstance(context.user_data, dict):
-            state_data = StateData(**context.user_data)
-
+        state_data = cls.craft_state_data(context)
         mediator = cls(
             state_data=state_data,
             entry_type=EntryTypes.COMMAND,
@@ -44,13 +43,17 @@ class QueryMediator:
     def from_callback(
         cls, update: Update, context: ContextTypes.DEFAULT_TYPE
     ) -> QueryMediator:
-        state_data = StateData()
-        if isinstance(context.user_data, dict):
-            state_data = StateData(**context.user_data)
+        state_data = cls.craft_state_data(context)
         if update.callback_query and update.callback_query.data:
-            state_data.name = update.callback_query.data
+            callback_box = LoadCallbackResponse.from_string(update.callback_query.data)
+            state_data.decisions[state_data.name] = callback_box.b
+            ## update parent's name
+            if state_data.name != callback_box.p:
+                state_data.parent.name = state_data.name
+
+            ## updating which state we're heading to
+            state_data.name = callback_box.p
             state_data.response_type = ResponseTypes.EDIT_TEXT
-            print(f"daaram miram be {state_data.name}")
 
         mediator = cls(
             state_data=state_data,
@@ -58,6 +61,13 @@ class QueryMediator:
             entry_type=EntryTypes.CALLBACK,
         )
         return mediator
+
+    @staticmethod
+    def craft_state_data(context: ContextTypes.DEFAULT_TYPE) -> StateData:
+        state_data = StateData()
+        if isinstance(context.user_data, dict):
+            state_data = StateData(**context.user_data)
+        return state_data
 
     def detect_page(self) -> QueryMediator:
         self.page = PageFinder.with_state(self.state_data)

@@ -3,6 +3,7 @@ from dataclasses import dataclass, field
 from typing import Dict, List, Optional
 
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup, User
+from src.models.callback_box import CallbackBox
 from src.actions.conditional_proposition_evaluator import (
     ConditionalPropositionEvaluator,
 )
@@ -28,15 +29,22 @@ class KeyboardGenerator(BaseGenerator):
                 row += [
                     InlineKeyboardButton(
                         text=button.text,
-                        callback_data=ConditionalPropositionEvaluator.eval(
-                            button.fn,
-                            variables=self.variables,
-                            state_data=self.state_data,
-                            user=self.user,
-                        ),
+                        callback_data=CallbackBox(
+                            p=ConditionalPropositionEvaluator.eval(
+                                button.fn,
+                                variables=self.variables,
+                                state_data=self.state_data,
+                                user=self.user,
+                            ),
+                            b=button.text,
+                        ).model_dump_json(),
                     )
                 ]
             self.buttons += [row]
+        print()
+        print()
+        print("buttons are as follows")
+        print(self.buttons)
         return self
 
     def generate(self) -> InlineKeyboardMarkup:

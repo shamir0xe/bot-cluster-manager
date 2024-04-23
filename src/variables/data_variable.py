@@ -6,6 +6,9 @@ class DataVariable(Variable):
     name = "data"
 
     @staticmethod
-    def callback(state_data: StateData = StateData(), **kargs) -> str:
-        return state_data.data
-
+    def callback(*args, state_data: StateData = StateData(), **kargs) -> str:
+        for arg in args:
+            value = state_data.variables.get(arg)
+            if value is not None:
+                return value
+        return ""

@@ -17,8 +17,11 @@ class ConditionalPropositionEvaluator:
         user: Optional[User],
     ) -> str:
         for proposition in propositions:
+            conclusion = ApplyVariables.with_content(
+                proposition.con, variables=variables, state_data=state_data, user=user
+            )
             if not proposition.hyp:
-                return proposition.con
+                return conclusion
             if len(proposition.hyp) != 3:
                 raise Exception("Hypothesis should contain exactly 3 parts")
             left_side = ApplyVariables.with_content(
@@ -38,7 +41,7 @@ class ConditionalPropositionEvaluator:
             if ConditionalPropositionEvaluator.single_statement(
                 left_side, operand, right_side
             ):
-                return proposition.con
+                return conclusion
 
         raise Exception("Invalid porpositions")
 
