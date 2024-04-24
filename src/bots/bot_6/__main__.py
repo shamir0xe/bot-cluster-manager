@@ -1,7 +1,8 @@
 from __future__ import annotations
 import logging
 from typing import Dict
-from src.mediators.message_query_mediator import MessageQueryMediator
+from src.mediators.query_mediators.photo_query_mediator import PhotoQueryMediator
+from src.mediators.query_mediators.message_query_mediator import MessageQueryMediator
 from src.actions.user_data_updater import UserDataUpdater
 from src.models.state_data import StateData
 from src.mediators.query_mediator import QueryMediator
@@ -82,11 +83,15 @@ class Bot_6:
         self.update = update
         self.context = context
         await self.procedure(
-            MessageQueryMediator.build(update, context).craft_state(self.variables)
+            MessageQueryMediator.build(update, context).initialize_chain(self.variables)
         )
 
     async def photo_query(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
-        pass
+        self.update = update
+        self.context = context
+        mediator = await PhotoQueryMediator.build(update, context)
+        mediator.initialize_chain(self.variables)
+        await self.procedure(mediator)
 
     def run(self) -> None:
         """Run the bot."""

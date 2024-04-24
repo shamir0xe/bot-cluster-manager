@@ -46,13 +46,14 @@ class QueryMediator:
         state_data = cls.craft_state_data(context)
         if update.callback_query and update.callback_query.data:
             callback_box = LoadCallbackResponse.from_string(update.callback_query.data)
+            ## store the made decision
             state_data.decisions[state_data.name] = callback_box.b
             ## update parent's name
             if state_data.name != callback_box.p:
                 state_data.parent.name = state_data.name
-
             ## updating which state we're heading to
             state_data.name = callback_box.p
+            ## set the response type
             state_data.response_type = ResponseTypes.EDIT_TEXT
 
         mediator = cls(
