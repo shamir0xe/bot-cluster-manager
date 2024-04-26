@@ -1,5 +1,4 @@
 from __future__ import annotations
-import asyncio
 import telegram
 from telegram import InlineQueryResultArticle, InputTextMessageContent, Update
 from telegram.ext import (

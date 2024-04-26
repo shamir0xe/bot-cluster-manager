@@ -1,15 +1,13 @@
-from src.helpers.config.config import Config
+from src.repositories.repository import Repository
 from src.models.state_data import StateData
 from src.models.page import Page
 
 
 class PageFinder:
     @staticmethod
-    def with_state(state_data: StateData) -> Page:
-        data = Config(
-            base_folder=f"src.bots.bot_{state_data.bot_id}.configs",
-        ).read("scenario.pages")
-        for page_data in data:
-            if page_data["name"] == state_data.name:
-                return Page(**page_data)
+    def with_state(state_data: StateData, repository: Repository) -> Page:
+        pages = repository.get_pages(state_data.bot_id)
+        for page in pages:
+            if page.name == state_data.name:
+                return page
         raise Exception("No such page found")

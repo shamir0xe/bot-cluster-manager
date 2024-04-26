@@ -1,11 +1,12 @@
 from __future__ import annotations
 from dataclasses import dataclass
-from typing import Dict, List, Optional
+from typing import Dict, Optional
 from telegram import InlineKeyboardMarkup, Update
 from telegram.ext import ContextTypes
 
+from src.repositories.repository import Repository
+from src.actions.state_data_crafter import StateDataCrafter
 from src.actions.load_callback_response import LoadCallbackResponse
-from src.models.parent_page import ParentPage
 from src.finders.page_finder import PageFinder
 from src.actions.user_data_updater import UserDataUpdater
 from src.actions.answer_callback import AnswerCallback
@@ -14,36 +15,39 @@ from src.actions.message_reply import MessageReply
 from src.generators.content_generator import ContentGenerator
 from src.generators.keyboard_generator import KeyboardGenerator
 from src.models.state_data import StateData
-from src.types.entry_types import EntryTypes
 from src.types.response_types import ResponseTypes
 from src.types.variable import Variable
+from src.types.flow_types import FlowTypes
 
 
 @dataclass
 class QueryMediator:
+    repository: Repository
     state_data: StateData
-    entry_type: EntryTypes
+    entry_type: FlowTypes
     update: Update
     content: str = ""
     keyboard: Optional[InlineKeyboardMarkup] = None
 
     @classmethod
     def from_command(
-        cls, update: Update, context: ContextTypes.DEFAULT_TYPE
+        cls, update: Update, context: ContextTypes.DEFAULT_TYPE, repository: Repository
     ) -> QueryMediator:
-        state_data = cls.craft_state_data(context)
+        state_data = StateDataCrafter.from_context(context)
+        state_data.response_type = ResponseTypes.MESSAGE
         mediator = cls(
+            repository=repository,
             state_data=state_data,
-            entry_type=EntryTypes.COMMAND,
             update=update,
+            entry_type=FlowTypes.COMMAND,
         )
         return mediator
 
     @classmethod
     def from_callback(
-        cls, update: Update, context: ContextTypes.DEFAULT_TYPE
+        cls, update: Update, context: ContextTypes.DEFAULT_TYPE, repository: Repository
     ) -> QueryMediator:
-        state_data = cls.craft_state_data(context)
+        state_data = StateDataCrafter.from_context(context)
         if update.callback_query and update.callback_query.data:
             callback_box = LoadCallbackResponse.from_string(update.callback_query.data)
             ## store the made decision
@@ -57,21 +61,15 @@ class QueryMediator:
             state_data.response_type = ResponseTypes.EDIT_TEXT
 
         mediator = cls(
+            repository=repository,
             state_data=state_data,
             update=update,
-            entry_type=EntryTypes.CALLBACK,
+            entry_type=FlowTypes.CALLBACK,
         )
         return mediator
 
-    @staticmethod
-    def craft_state_data(context: ContextTypes.DEFAULT_TYPE) -> StateData:
-        state_data = StateData()
-        if isinstance(context.user_data, dict):
-            state_data = StateData(**context.user_data)
-        return state_data
-
     def detect_page(self) -> QueryMediator:
-        self.page = PageFinder.with_state(self.state_data)
+        self.page = PageFinder.with_state(self.state_data, self.repository)
         return self
 
     def validate_data(self) -> QueryMediator:
@@ -111,7 +109,7 @@ class QueryMediator:
         return self
 
     async def answer(self) -> QueryMediator:
-        if self.entry_type is EntryTypes.CALLBACK:
+        if self.entry_type is FlowTypes.CALLBACK:
             await AnswerCallback.with_update(self.update)
         response_type = self.state_data.response_type
         if response_type is ResponseTypes.EDIT_TEXT:

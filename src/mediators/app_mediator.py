@@ -1,4 +1,5 @@
 from __future__ import annotations
+import asyncio
 import importlib
 
 from src.actions.bot_name_mapper import BotModulePathMapper
@@ -21,7 +22,6 @@ class AppMediator:
         return self
 
     def run_bot(self) -> None:
-        print(self.arg_data)
         bot_id = self.arg_data.bot_id
         bot_name = BotModulePathMapper.map(bot_id)
         bot_module = importlib.import_module(bot_name)

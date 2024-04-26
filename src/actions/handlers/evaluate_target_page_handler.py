@@ -1,10 +1,10 @@
-from typing import Dict, Optional
+from typing import Dict, List, Optional
 
 from telegram import User
+from src.models.conditional_proposition import ConditionalProposition
 from src.actions.conditional_proposition_evaluator import (
     ConditionalPropositionEvaluator,
 )
-from src.models.page import Page
 from src.models.state_data import StateData
 from src.types.variable import Variable
 
@@ -13,41 +13,22 @@ class EvaluateTargetPageHandler:
     """evaluate which page should be heading to"""
 
     @staticmethod
-    def from_photo(
-        state_data: StateData,
+    def with_flow(
+        flow: List[ConditionalProposition],
         user: Optional[User],
-        parent_page: Page,
+        state_data: StateData,
         variables: Dict[str, Variable],
+        default: str = "",
     ) -> str:
-        going_to = parent_page.name
-        if parent_page.flow and parent_page.flow.photo:
+        going_to = default
+        if flow:
             going_to = ConditionalPropositionEvaluator.eval(
-                propositions=parent_page.flow.photo.fn,
+                propositions=flow,
                 variables=variables,
                 state_data=state_data,
                 user=user,
             )
         ## updaing parent's name
-        EvaluateTargetPageHandler.update_parent_info(state_data, going_to)
-        return going_to
-
-    @staticmethod
-    def from_text(
-        state_data: StateData,
-        user: Optional[User],
-        parent_page: Page,
-        variables: Dict[str, Variable],
-    ) -> str:
-        ## evaluating which page should be represented next
-        going_to = parent_page.name
-        if parent_page.flow and parent_page.flow.text:
-            going_to = ConditionalPropositionEvaluator.eval(
-                propositions=parent_page.flow.text.fn,
-                variables=variables,
-                state_data=state_data,
-                user=user,
-            )
-        ## update parent's name
         EvaluateTargetPageHandler.update_parent_info(state_data, going_to)
         return going_to
 

@@ -1,4 +1,4 @@
-from typing import Dict, List, Optional
+from typing import Dict, Optional
 from telegram import User
 from src.models.state_data import StateData
 from src.types.variable import Variable
@@ -7,11 +7,13 @@ from src.types.variable import Variable
 class ApplyVariables:
     @staticmethod
     def with_content(
-        template: str,
+        template: Optional[str],
         variables: Dict[str, Variable],
         state_data: StateData,
         user: Optional[User],
     ) -> str:
+        if not template:
+            return ""
         content = ""
         in_var_name = False
         i = 0

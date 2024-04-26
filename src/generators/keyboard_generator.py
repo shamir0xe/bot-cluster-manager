@@ -3,6 +3,8 @@ from dataclasses import dataclass, field
 from typing import Dict, List, Optional
 
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup, User
+from src.helpers.builders.inline_button_builder import InlineButtonBuilder
+from src.actions.apply_variables import ApplyVariables
 from src.models.callback_box import CallbackBox
 from src.actions.conditional_proposition_evaluator import (
     ConditionalPropositionEvaluator,
@@ -27,17 +29,29 @@ class KeyboardGenerator(BaseGenerator):
             row: List[InlineKeyboardButton] = []
             for button in row_buttons:
                 row += [
-                    InlineKeyboardButton(
-                        text=button.text,
-                        callback_data=CallbackBox(
-                            p=ConditionalPropositionEvaluator.eval(
-                                button.fn,
+                    (
+                        InlineButtonBuilder()
+                        .add_text(button.text)
+                        .add_callback(
+                            CallbackBox(
+                                p=ConditionalPropositionEvaluator.eval(
+                                    button.fn,
+                                    variables=self.variables,
+                                    state_data=self.state_data,
+                                    user=self.user,
+                                ),
+                                b=button.text,
+                            ).model_dump_json()
+                        )
+                        .add_url(
+                            ApplyVariables.with_content(
+                                button.url,
                                 variables=self.variables,
                                 state_data=self.state_data,
                                 user=self.user,
-                            ),
-                            b=button.text,
-                        ).model_dump_json(),
+                            )
+                        )
+                        .build()
                     )
                 ]
             self.buttons += [row]

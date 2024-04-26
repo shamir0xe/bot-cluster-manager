@@ -1,8 +1,8 @@
 from pydantic import BaseModel
 
-from src.types.response_types import ResponseTypes
+from src.types.flow_types import FlowTypes
 
 
 class ParentPage(BaseModel):
     name: str = ""
-    response_type: ResponseTypes = ResponseTypes.MESSAGE
+    flow_type: FlowTypes = FlowTypes.CALLBACK

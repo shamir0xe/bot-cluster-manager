@@ -15,28 +15,31 @@ from src.types.flow_types import FlowTypes
 
 
 @dataclass
-class PhotoQueryMediator(QueryMediator):
+class VideoQueryMediator(QueryMediator):
     file: Optional[File] = None
 
     @classmethod
     async def build(
         cls, update: Update, context: ContextTypes.DEFAULT_TYPE, repository: Repository
-    ) -> PhotoQueryMediator:
+    ) -> VideoQueryMediator:
         state_data = StateDataCrafter.from_context(context)
         file = None
-        if update.message and update.message.photo:
-            file = await update.message.photo[-1].get_file()
-            file.file_id
+        if update.message and update.message.video:
+            ## video file
+            file = await update.message.video.get_file()
+        elif update.message and update.message.video_note:
+            ## video message
+            file = await update.message.video_note.get_file()
 
         return cls(
             repository=repository,
             file=file,
             state_data=state_data,
             update=update,
-            entry_type=FlowTypes.PHOTO,
+            entry_type=FlowTypes.VIDEO,
         )
 
-    def initialize_chain(self, variables: Dict[str, Variable]) -> PhotoQueryMediator:
+    def initialize_chain(self, variables: Dict[str, Variable]) -> VideoQueryMediator:
         """Store parent variable,
         Detect which state are we in,
         Detect which state we are heading to, and
@@ -44,9 +47,9 @@ class PhotoQueryMediator(QueryMediator):
         """
         ## detect parent page
         parent_page = self.detect_page().page
-        StoreVariableHandler.store_photo(self.state_data, self.file, parent_page)
+        StoreVariableHandler.store_video(self.state_data, self.file, parent_page)
         EvaluateTargetPageHandler.with_flow(
-            flow=FlowFinder.with_page(parent_page, FlowTypes.PHOTO),
+            flow=FlowFinder.with_page(parent_page, FlowTypes.VIDEO),
             user=self.update.effective_user,
             state_data=self.state_data,
             variables=variables,

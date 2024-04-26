@@ -10,6 +10,6 @@ class ParentVariable(Variable):
         for arg in args:
             if arg == "name":
                 return state_data.parent.name
-            if arg == "response_type":
-                return state_data.parent.response_type.value
+            if arg == "flow_type":
+                return state_data.parent.flow_type.value
         return ""

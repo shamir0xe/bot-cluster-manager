@@ -1,7 +1,7 @@
 from __future__ import annotations
 from dataclasses import dataclass
-from typing import Dict, Optional
-from telegram import File, Update
+from typing import Dict
+from telegram import Update
 from telegram.ext import ContextTypes
 from src.repositories.repository import Repository
 from src.actions.state_data_crafter import StateDataCrafter
@@ -15,38 +15,36 @@ from src.types.flow_types import FlowTypes
 
 
 @dataclass
-class PhotoQueryMediator(QueryMediator):
-    file: Optional[File] = None
+class TextQueryMediator(QueryMediator):
+    input_text: str = ""
 
     @classmethod
-    async def build(
+    def build(
         cls, update: Update, context: ContextTypes.DEFAULT_TYPE, repository: Repository
-    ) -> PhotoQueryMediator:
+    ) -> TextQueryMediator:
         state_data = StateDataCrafter.from_context(context)
-        file = None
-        if update.message and update.message.photo:
-            file = await update.message.photo[-1].get_file()
-            file.file_id
+        input_text = ""
+        if update.message and update.message.text:
+            input_text = update.message.text
 
         return cls(
             repository=repository,
-            file=file,
+            input_text=input_text,
             state_data=state_data,
             update=update,
-            entry_type=FlowTypes.PHOTO,
+            entry_type=FlowTypes.TEXT,
         )
 
-    def initialize_chain(self, variables: Dict[str, Variable]) -> PhotoQueryMediator:
+    def initialize_chain(self, variables: Dict[str, Variable]) -> TextQueryMediator:
         """Store parent variable,
         Detect which state are we in,
         Detect which state we are heading to, and
         Update parent's info
         """
-        ## detect parent page
         parent_page = self.detect_page().page
-        StoreVariableHandler.store_photo(self.state_data, self.file, parent_page)
+        StoreVariableHandler.store_text(self.state_data, self.input_text, parent_page)
         EvaluateTargetPageHandler.with_flow(
-            flow=FlowFinder.with_page(parent_page, FlowTypes.PHOTO),
+            flow=FlowFinder.with_page(parent_page, FlowTypes.TEXT),
             user=self.update.effective_user,
             state_data=self.state_data,
             variables=variables,
