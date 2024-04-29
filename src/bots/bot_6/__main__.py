@@ -11,7 +11,7 @@ from src.mediators.query_mediators.audio_query_mediator import AudioQueryMediato
 from src.mediators.query_mediators.video_query_mediator import VideoQueryMediator
 from src.mediators.query_mediators.photo_query_mediator import PhotoQueryMediator
 from src.mediators.query_mediators.text_query_mediator import TextQueryMediator
-from src.actions.user_data_updater import UserDataUpdater
+from src.actions.utility.user_data_updater import UserDataUpdater
 from src.models.utility.state_data import StateData
 from src.mediators.query_mediator import QueryMediator
 from src.mediators.variable_mediator import VariableMediator

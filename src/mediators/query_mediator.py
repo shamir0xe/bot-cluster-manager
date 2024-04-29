@@ -3,15 +3,14 @@ from dataclasses import dataclass
 from typing import Dict, Optional
 from telegram import InlineKeyboardMarkup, Update
 from telegram.ext import ContextTypes
-
 from src.repositories.repository import Repository
-from src.actions.state_data_crafter import StateDataCrafter
-from src.actions.load_callback_response import LoadCallbackResponse
+from src.actions.utility.state_data_crafter import StateDataCrafter
+from src.actions.callback.load_callback_response import LoadCallbackResponse
 from src.finders.page_finder import PageFinder
-from src.actions.user_data_updater import UserDataUpdater
-from src.actions.answer_callback import AnswerCallback
-from src.actions.message_edit import MessageEdit
-from src.actions.message_reply import MessageReply
+from src.actions.utility.user_data_updater import UserDataUpdater
+from src.actions.callback.answer_callback import AnswerCallback
+from src.actions.message.message_edit import MessageEdit
+from src.actions.message.message_reply import MessageReply
 from src.generators.content_generator import ContentGenerator
 from src.generators.keyboard_generator import KeyboardGenerator
 from src.models.utility.state_data import StateData

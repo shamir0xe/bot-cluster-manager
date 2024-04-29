@@ -1,8 +1,6 @@
 from __future__ import annotations
-import asyncio
 import importlib
-
-from src.actions.bot_name_mapper import BotModulePathMapper
+from src.actions.utility.bot_name_mapper import BotModulePathMapper
 from src.helpers.cli.arg_helper import ArgHelper
 from src.types.arg_data import ArgData
 

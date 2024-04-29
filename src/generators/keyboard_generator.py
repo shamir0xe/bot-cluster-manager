@@ -4,9 +4,9 @@ from typing import Dict, List, Optional
 
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup, User
 from src.helpers.builders.inline_button_builder import InlineButtonBuilder
-from src.actions.apply_variables import ApplyVariables
+from src.actions.variable.apply_variables import ApplyVariables
 from src.models.page.callback_box import CallbackBox
-from src.actions.conditional_proposition_evaluator import (
+from src.actions.utility.conditional_proposition_evaluator import (
     ConditionalPropositionEvaluator,
 )
 from src.models.page.keyboard import Keyboard

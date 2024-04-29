@@ -1,6 +1,5 @@
 from typing import Tuple
 from pylib_0xe.string.string_helper import StringHelper
-
 from src.helpers.config.config import Config
 
 

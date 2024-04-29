@@ -2,7 +2,7 @@ from typing import Dict, List, Optional
 
 from telegram import User
 from src.models.page.conditional_proposition import ConditionalProposition
-from src.actions.conditional_proposition_evaluator import (
+from src.actions.utility.conditional_proposition_evaluator import (
     ConditionalPropositionEvaluator,
 )
 from src.models.utility.state_data import StateData

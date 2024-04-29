@@ -1,8 +1,7 @@
 from __future__ import annotations
 from typing import Dict, List
 import importlib
-
-from src.actions.variable_module_path_mapper import VariableModulePathMapper
+from src.actions.variable.variable_module_path_mapper import VariableModulePathMapper
 from src.helpers.config.config import Config
 from src.types.variable import Variable
 

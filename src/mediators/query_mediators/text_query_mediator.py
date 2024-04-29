@@ -4,10 +4,10 @@ from typing import Dict
 from telegram import Update
 from telegram.ext import ContextTypes
 from src.repositories.repository import Repository
-from src.actions.state_data_crafter import StateDataCrafter
+from src.actions.utility.state_data_crafter import StateDataCrafter
 from src.finders.flow_finder import FlowFinder
-from src.actions.handlers.evaluate_target_page_handler import EvaluateTargetPageHandler
-from src.actions.handlers.store_variable_handler import StoreVariableHandler
+from src.actions.page.evaluate_target_page_handler import EvaluateTargetPageHandler
+from src.actions.variable.store_variable_handler import StoreVariableHandler
 from src.mediators.query_mediator import QueryMediator
 from src.types.response_types import ResponseTypes
 from src.types.variable import Variable
