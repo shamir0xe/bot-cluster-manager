@@ -1,6 +1,6 @@
 from typing import Dict
 from pydantic import BaseModel, Field
-from src.models.parent_page import ParentPage
+from src.models.utility.parent_page import ParentPage
 from src.types.response_types import ResponseTypes
 
 

@@ -2,8 +2,8 @@ from typing import Dict, List, Optional
 
 from telegram import User
 from src.actions.apply_variables import ApplyVariables
-from src.models.state_data import StateData
-from src.models.conditional_proposition import ConditionalProposition
+from src.models.utility.state_data import StateData
+from src.models.page.conditional_proposition import ConditionalProposition
 from src.types.operand_types import OperandTypes
 from src.types.variable import Variable
 

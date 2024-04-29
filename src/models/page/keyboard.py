@@ -1,7 +1,7 @@
 from typing import List
 from pydantic import BaseModel
 
-from src.models.button import Button
+from .button import Button
 from src.types.keyboard_types import KeyboardTypes
 
 

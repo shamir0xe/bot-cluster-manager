@@ -1,11 +1,11 @@
 from typing import Dict, List, Optional
 
 from telegram import User
-from src.models.conditional_proposition import ConditionalProposition
+from src.models.page.conditional_proposition import ConditionalProposition
 from src.actions.conditional_proposition_evaluator import (
     ConditionalPropositionEvaluator,
 )
-from src.models.state_data import StateData
+from src.models.utility.state_data import StateData
 from src.types.variable import Variable
 
 

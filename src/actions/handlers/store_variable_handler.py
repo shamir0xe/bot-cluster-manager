@@ -1,7 +1,7 @@
 from typing import Optional
 from telegram import File
-from src.models.page import Page
-from src.models.state_data import StateData
+from src.models.page.page import Page
+from src.models.utility.state_data import StateData
 from src.types.flow_types import FlowTypes
 
 

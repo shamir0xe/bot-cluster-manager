@@ -1,7 +1,6 @@
 from pydantic import BaseModel
 
 
-class Bot(BaseModel):
-    id: int
+class LoginResponse(BaseModel):
     token: str
-    name: str
+

@@ -1,0 +1,6 @@
+{
+    "max_retries": 5,
+    "max_errors": 5,
+    "sleep_interval": 0.2
+}
+

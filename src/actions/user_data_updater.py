@@ -1,5 +1,5 @@
 from telegram.ext import ContextTypes
-from src.models.state_data import StateData
+from src.models.utility.state_data import StateData
 
 
 class UserDataUpdater:

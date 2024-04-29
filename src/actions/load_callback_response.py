@@ -1,4 +1,4 @@
-from src.models.callback_box import CallbackBox
+from src.models.page.callback_box import CallbackBox
 import json
 
 

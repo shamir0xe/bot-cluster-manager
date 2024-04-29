@@ -1,6 +1,6 @@
 from typing import List, Optional
 from pydantic import BaseModel
-from src.models.conditional_proposition import ConditionalProposition
+from .conditional_proposition import ConditionalProposition
 
 
 class PageFlow(BaseModel):

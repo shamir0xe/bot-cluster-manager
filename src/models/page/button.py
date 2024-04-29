@@ -1,7 +1,7 @@
 from typing import List, Optional
 from pydantic import BaseModel, Field
 
-from src.models.conditional_proposition import ConditionalProposition
+from .conditional_proposition import ConditionalProposition
 
 
 class Button(BaseModel):

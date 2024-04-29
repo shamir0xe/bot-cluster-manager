@@ -1,6 +1,7 @@
 from typing import Annotated, Any
 from pydantic import BaseModel, BeforeValidator
 from pydantic.networks import IPvAnyNetwork
+from src.models.utility.api import API
 from src.types.repository_types import RepositoryTypes
 
 
@@ -20,3 +21,4 @@ class EnvData(BaseModel):
     repository: RT
     port: int
     host: IPvAnyNetwork
+    api: API

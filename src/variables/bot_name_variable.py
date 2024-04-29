@@ -1,4 +1,4 @@
-from src.models.state_data import StateData
+from src.models.utility.state_data import StateData
 from src.helpers.config.config import Config
 from src.types.variable import Variable
 

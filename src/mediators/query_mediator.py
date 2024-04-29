@@ -14,7 +14,7 @@ from src.actions.message_edit import MessageEdit
 from src.actions.message_reply import MessageReply
 from src.generators.content_generator import ContentGenerator
 from src.generators.keyboard_generator import KeyboardGenerator
-from src.models.state_data import StateData
+from src.models.utility.state_data import StateData
 from src.types.response_types import ResponseTypes
 from src.types.variable import Variable
 from src.types.flow_types import FlowTypes

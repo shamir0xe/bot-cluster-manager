@@ -1,6 +1,6 @@
 from typing import List
-from src.models.conditional_proposition import ConditionalProposition
-from src.models.page import Page
+from src.models.page.conditional_proposition import ConditionalProposition
+from src.models.page.page import Page
 from src.types.flow_types import FlowTypes
 
 

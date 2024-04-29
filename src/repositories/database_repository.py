@@ -2,8 +2,8 @@ import functools
 from typing import List
 
 from src.helpers.config.config import Config
-from src.models.bot import Bot
-from src.models.page import Page
+from src.models.bot.bot import Bot
+from src.models.page.page import Page
 from src.repositories.repository import Repository
 
 

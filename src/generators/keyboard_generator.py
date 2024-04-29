@@ -5,12 +5,12 @@ from typing import Dict, List, Optional
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup, User
 from src.helpers.builders.inline_button_builder import InlineButtonBuilder
 from src.actions.apply_variables import ApplyVariables
-from src.models.callback_box import CallbackBox
+from src.models.page.callback_box import CallbackBox
 from src.actions.conditional_proposition_evaluator import (
     ConditionalPropositionEvaluator,
 )
-from src.models.keyboard import Keyboard
-from src.models.state_data import StateData
+from src.models.page.keyboard import Keyboard
+from src.models.utility.state_data import StateData
 from src.generators.base_generator import BaseGenerator
 from src.types.variable import Variable
 

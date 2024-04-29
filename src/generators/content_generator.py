@@ -2,12 +2,12 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import Dict, List, Optional
 from telegram import User
-from src.models.page import Page
+from src.models.page.page import Page
 from src.finders.page_finder import PageFinder
 from src.actions.apply_variables import ApplyVariables
 from src.generators.base_generator import BaseGenerator
 from src.helpers.config.config import Config
-from src.models.state_data import StateData
+from src.models.utility.state_data import StateData
 from src.types.variable import Variable
 
 

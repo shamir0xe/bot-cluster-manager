@@ -1,6 +1,6 @@
 from src.repositories.repository import Repository
-from src.models.state_data import StateData
-from src.models.page import Page
+from src.models.utility.state_data import StateData
+from src.models.page.page import Page
 
 
 class PageFinder:

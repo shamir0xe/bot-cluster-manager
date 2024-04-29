@@ -5,14 +5,14 @@ from src.repositories.api_repository import ApiRepository
 from src.repositories.database_repository import DatabaseRepository
 from src.repositories.repository import Repository
 from src.facades.env import Env
-from src.models.bot import Bot
-from src.models.bot_cfg import BotCfg
+from src.models.bot.bot import Bot
+from src.models.bot.bot_cfg import BotCfg
 from src.mediators.query_mediators.audio_query_mediator import AudioQueryMediator
 from src.mediators.query_mediators.video_query_mediator import VideoQueryMediator
 from src.mediators.query_mediators.photo_query_mediator import PhotoQueryMediator
 from src.mediators.query_mediators.text_query_mediator import TextQueryMediator
 from src.actions.user_data_updater import UserDataUpdater
-from src.models.state_data import StateData
+from src.models.utility.state_data import StateData
 from src.mediators.query_mediator import QueryMediator
 from src.mediators.variable_mediator import VariableMediator
 from src.helpers.config.bot_config import BotConfig
