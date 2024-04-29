@@ -7,8 +7,10 @@ class MessageReply:
     async def with_update(
         update: Update, text: str = "", keyboard: Optional[InlineKeyboardMarkup] = None
     ):
-        if update.message:
+        if update.effective_sender:
             if keyboard:
-                await update.message.reply_text(text=text, reply_markup=keyboard)
+                await update.effective_sender.send_message(
+                    text=text, reply_markup=keyboard
+                )
             else:
-                await update.message.reply_text(text=text)
+                await update.effective_sender.send_message(text=text)

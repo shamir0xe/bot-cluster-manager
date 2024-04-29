@@ -1,6 +1,7 @@
 from __future__ import annotations
 import logging
 from typing import Dict
+from src.actions.callback.answer_callback import AnswerCallback
 from src.repositories.api_repository import ApiRepository
 from src.repositories.database_repository import DatabaseRepository
 from src.repositories.repository import Repository
@@ -65,10 +66,13 @@ class Bot_6:
             self.repository = ApiRepository()
         return self
 
+    def new_state_data(self, context: ContextTypes.DEFAULT_TYPE) -> Bot_6:
+        UserDataUpdater.update(context, StateData(bot_id=self.bot.id, started=True))
+        return self
+
     async def start(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
         # starting a fresh user_data
-        self.backup(update, context)
-        UserDataUpdater.update(context, StateData(bot_id=self.bot.id))
+        self.backup(update, context).new_state_data(context)
         await self.procedure(
             QueryMediator.from_command(update, context, self.repository)
         )
@@ -95,9 +99,10 @@ class Bot_6:
         await query_mediator.answer()
         query_mediator.update_user_data(self.context)
 
-    def backup(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
+    def backup(self, update: Update, context: ContextTypes.DEFAULT_TYPE) -> Bot_6:
         self.update = update
         self.context = context
+        return self
 
     async def text_query(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
         self.backup(update, context)
@@ -123,6 +128,12 @@ class Bot_6:
         mediator.initialize_chain(self.variables)
         await self.procedure(mediator)
 
+    async def error_handler(self, update: object, context: ContextTypes.DEFAULT_TYPE):
+        print(f"error occured {str(context.error)}, go to start")
+        if isinstance(update, Update):
+            await AnswerCallback.with_update(self.update)
+            await self.start(update, context)
+
     def run(self) -> None:
         """Run the bot."""
         # Create the Application and pass it your bot's token.
@@ -142,6 +153,7 @@ class Bot_6:
         application.add_handler(
             MessageHandler(filters.VOICE | filters.AUDIO, self.audio_query)
         )
+        application.add_error_handler(self.error_handler)
 
         # Run the bot until the user presses Ctrl-C
         application.run_polling(allowed_updates=Update.ALL_TYPES)

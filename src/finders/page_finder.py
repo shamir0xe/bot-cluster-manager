@@ -1,6 +1,7 @@
 from src.repositories.repository import Repository
 from src.models.utility.state_data import StateData
 from src.models.page.page import Page
+from src.types.exception_types import ExceptionTypes
 
 
 class PageFinder:
@@ -10,4 +11,4 @@ class PageFinder:
         for page in pages:
             if page.name == state_data.name:
                 return page
-        raise Exception("No such page found")
+        raise Exception(ExceptionTypes.PAGE_NOT_FOUND)
