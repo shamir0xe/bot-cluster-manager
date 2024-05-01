@@ -66,13 +66,22 @@ class Bot_6:
             self.repository = ApiRepository()
         return self
 
-    def new_state_data(self, context: ContextTypes.DEFAULT_TYPE) -> Bot_6:
-        UserDataUpdater.update(context, StateData(bot_id=self.bot.id, started=True))
+    def new_state_data(self) -> Bot_6:
+        username = "EMPTY"
+        if self.update.effective_user and self.update.effective_user.username:
+            username = self.update.effective_user.username
+        session_id = self.repository.request_session(
+            bot_id=self.bot.id, telegram_id=username
+        )
+        UserDataUpdater.update(
+            self.context,
+            StateData(bot_id=self.bot.id, started=True, session_id=session_id),
+        )
         return self
 
     async def start(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
         # starting a fresh user_data
-        self.backup(update, context).new_state_data(context)
+        self.backup(update, context).new_state_data()
         await self.procedure(
             QueryMediator.from_command(update, context, self.repository)
         )

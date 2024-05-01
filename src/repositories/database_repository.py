@@ -1,6 +1,5 @@
 import functools
 from typing import List
-
 from src.helpers.config.config import Config
 from src.models.bot.bot import Bot
 from src.models.page.page import Page
@@ -27,3 +26,9 @@ class DatabaseRepository(Repository):
         for page_data in data:
             pages += [Page(**page_data)]
         return pages
+
+    def request_session(self, bot_id: int, telegram_id: str) -> str:
+        return "good-old-fake-session-:)"
+
+    def update_session(self, session_id: str, data: str) -> None:
+        return

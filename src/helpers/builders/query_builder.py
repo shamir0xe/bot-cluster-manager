@@ -17,13 +17,13 @@ class QueryBuilder(BaseBuilder):
         builder.name = QueryTypes.BOT_INFO
         builder.response_field = "botInfo"
         builder.query = """
-        query BotInfoAdminPermission($bot_id: String!) {
-            botInfo(botId: $bot_id) {
-                id
-                token
-                name
+            query BotInfoAdminPermission($bot_id: String!) {
+                botInfo(botId: $bot_id) {
+                    id
+                    token
+                    name
+                }
             }
-        }
         """
         builder.vars = {"bot_id": str(bot_id)}
         return builder
@@ -34,12 +34,12 @@ class QueryBuilder(BaseBuilder):
         builder.name = QueryTypes.LOGIN
         builder.response_field = "login"
         builder.query = """
-        mutation Login($username: String!) {
-            login(telegramId: $username) {
-                id
-                token
-            }
-        } 
+            mutation Login($username: String!) {
+                login(telegramId: $username) {
+                    id
+                    token
+                }
+            } 
         """
         builder.vars = {"username": username}
         return builder
@@ -50,13 +50,47 @@ class QueryBuilder(BaseBuilder):
         builder.name = QueryTypes.GET_PAGES
         builder.response_field = "botInfo"
         builder.query = """
-        query BotInfoAdminPermission($bot_id: String!) {
-            botInfo(botId: $bot_id) {
-                pages
+            query BotInfoAdminPermission($bot_id: String!) {
+                botInfo(botId: $bot_id) {
+                    pages
+                }
             }
-        }
         """
         builder.vars = {"bot_id": str(bot_id)}
+        return builder
+
+    @staticmethod
+    def request_session(bot_id: int, telegram_id: str) -> QueryBuilder:
+        builder = QueryBuilder()
+        builder.name = QueryTypes.REQUEST_SESSION
+        builder.response_field = "requestBotSession"
+        builder.query = """
+        mutation RequestBotSession($bot_id: String!, $telegram_id: String!) {
+          requestBotSession(botId: $bot_id, telegramId: $telegram_id) {
+            id
+          }
+        }
+        """
+        builder.vars = {"bot_id": str(bot_id), "telegram_id": telegram_id}
+        return builder
+
+    @staticmethod
+    def update_session(session_id: str, data: str) -> QueryBuilder:
+        builder = QueryBuilder()
+        builder.name = QueryTypes.UPDATE_SESSION
+        builder.response_field = "updateBotSession"
+        builder.query = """
+            mutation UpdateSession($data: String!, $session_id: String!) {
+              updateBotSession(
+                data: $data
+                sessionId: $session_id
+              ) {
+                id
+                data
+              }
+            }
+        """
+        builder.vars = {"data": data, "session_id": session_id}
         return builder
 
     def build(self, *args, **kwargs) -> QueryWrapper:

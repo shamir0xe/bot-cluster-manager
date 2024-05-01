@@ -28,3 +28,18 @@ class ApiRepository(Repository):
             for page_data in pages_json:
                 pages += [Page(**page_data)]
         return pages
+
+    def request_session(self, bot_id: int, telegram_id: str) -> str:
+        response = Network.query(
+            QueryBuilder.request_session(bot_id=bot_id, telegram_id=telegram_id).build()
+        )
+        if response:
+            return response["id"]
+        raise Exception(ExceptionTypes.NETWORK_ERROR)
+
+    def update_session(self, session_id: str, data: str) -> None:
+        response = Network.query(
+            QueryBuilder.update_session(session_id=session_id, data=data).build()
+        )
+        if not response:
+            raise Exception(ExceptionTypes.NETWORK_ERROR)

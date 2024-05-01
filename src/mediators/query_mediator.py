@@ -81,6 +81,9 @@ class QueryMediator:
 
     def store_data(self) -> QueryMediator:
         ## Save data as ...
+        self.repository.update_session(
+            self.state_data.session_id, self.state_data.model_dump_json()
+        )
         return self
 
     def create_content(self, variables: Dict[str, Variable]) -> QueryMediator:

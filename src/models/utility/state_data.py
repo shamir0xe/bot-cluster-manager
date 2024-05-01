@@ -14,6 +14,7 @@ class StateData(BaseModel):
     response_type: ResponseTypes = ResponseTypes.EDIT_TEXT
     decisions: Dict[str, str] = Field(default_factory=dict)
     started: bool = False
+    session_id: str = ""
 
     @staticmethod
     def default():
