@@ -1,13 +1,13 @@
 from __future__ import annotations
 import logging
 from typing import Dict
+
 from src.actions.callback.answer_callback import AnswerCallback
 from src.repositories.api_repository import ApiRepository
 from src.repositories.database_repository import DatabaseRepository
 from src.repositories.repository import Repository
 from src.facades.env import Env
 from src.models.bot.bot import Bot
-from src.models.bot.bot_cfg import BotCfg
 from src.mediators.query_mediators.audio_query_mediator import AudioQueryMediator
 from src.mediators.query_mediators.video_query_mediator import VideoQueryMediator
 from src.mediators.query_mediators.photo_query_mediator import PhotoQueryMediator
@@ -16,7 +16,6 @@ from src.actions.utility.user_data_updater import UserDataUpdater
 from src.models.utility.state_data import StateData
 from src.mediators.query_mediator import QueryMediator
 from src.mediators.variable_mediator import VariableMediator
-from src.helpers.config.bot_config import BotConfig
 from src.types.variable import Variable
 from src.types.repository_types import RepositoryTypes
 from telegram import Update
@@ -45,19 +44,20 @@ class Bot_6:
     variables: Dict[str, Variable]
     bot: Bot
     repository: Repository
+    app: Application
 
-    def read_environments(self) -> Bot_6:
-        # self.env = BotEnvData(**BotConfig(__file__).read("env"))
-        return self
+    def __init__(self, bot_id: int) -> None:
+        self.bot_id = bot_id
 
-    def read_configs(self) -> Bot_6:
-        self.cfg = BotCfg(**BotConfig(__file__).read("cfg"))
+    def register_variables(self) -> Bot_6:
+        """Register variables"""
         self.variables = (
             VariableMediator().read_config().register_variables().get_variables()
         )
         return self
 
     def init_repository(self) -> Bot_6:
+        """Create repository based on the environment"""
         if Env().repository == RepositoryTypes.DATABASE:
             ## database-repository
             self.repository = DatabaseRepository()
@@ -66,7 +66,8 @@ class Bot_6:
             self.repository = ApiRepository()
         return self
 
-    def new_state_data(self) -> Bot_6:
+    def create_session_data(self) -> Bot_6:
+        """Create new session and state_data"""
         username = "EMPTY"
         if self.update.effective_user and self.update.effective_user.username:
             username = self.update.effective_user.username
@@ -75,13 +76,22 @@ class Bot_6:
         )
         UserDataUpdater.update(
             self.context,
-            StateData(bot_id=self.bot.id, started=True, session_id=session_id),
+            StateData(
+                bot_id=self.bot.id,
+                started=True,
+                session_id=session_id,
+                bot_name=self.bot.name,
+            ),
         )
+        return self
+
+    def create_bot_instance(self) -> Bot_6:
+        self.bot = self.repository.get_me(self.bot_id)
         return self
 
     async def start(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
         # starting a fresh user_data
-        self.backup(update, context).new_state_data()
+        self.backup(update, context).create_session_data()
         await self.procedure(
             QueryMediator.from_command(update, context, self.repository)
         )
@@ -143,30 +153,32 @@ class Bot_6:
             await AnswerCallback.with_update(self.update)
             await self.start(update, context)
 
-    def run(self) -> None:
-        """Run the bot."""
-        # Create the Application and pass it your bot's token.
-        self.bot = self.repository.get_me(self.cfg.id)
-        application = Application.builder().token(self.bot.token).build()
-        application.add_handler(CommandHandler("start", self.start))
-        application.add_handler(CommandHandler("help", self.help))
-        application.add_handler(CommandHandler("stop", self.stop))
-        application.add_handler(CallbackQueryHandler(self.callback_query))
-        application.add_handler(
+    def build_application(self) -> Bot_6:
+        """Create the application"""
+        self.app = Application.builder().token(self.bot.token).build()
+        self.app.add_handler(CommandHandler("start", self.start))
+        self.app.add_handler(CommandHandler("help", self.help))
+        self.app.add_handler(CommandHandler("stop", self.stop))
+        self.app.add_handler(CallbackQueryHandler(self.callback_query))
+        self.app.add_handler(
             MessageHandler(filters.TEXT & ~filters.COMMAND, self.text_query)
         )
-        application.add_handler(MessageHandler(filters.PHOTO, self.photo_query))
-        application.add_handler(
+        self.app.add_handler(MessageHandler(filters.PHOTO, self.photo_query))
+        self.app.add_handler(
             MessageHandler(filters.VIDEO | filters.VIDEO_NOTE, self.video_query)
         )
-        application.add_handler(
+        self.app.add_handler(
             MessageHandler(filters.VOICE | filters.AUDIO, self.audio_query)
         )
-        application.add_error_handler(self.error_handler)
+        self.app.add_error_handler(self.error_handler)
+        return self
 
-        # Run the bot until the user presses Ctrl-C
-        application.run_polling(allowed_updates=Update.ALL_TYPES)
+    def run(self) -> None:
+        """Run the bot."""
+        self.app.run_polling(allowed_updates=Update.ALL_TYPES)
 
 
-def main():
-    Bot_6().read_configs().init_repository().run()
+def main(bot_id: int):
+    Bot_6(
+        bot_id=bot_id
+    ).register_variables().init_repository().create_bot_instance().build_application().run()

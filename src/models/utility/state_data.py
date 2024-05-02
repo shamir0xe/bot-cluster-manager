@@ -6,6 +6,7 @@ from src.types.response_types import ResponseTypes
 
 class StateData(BaseModel):
     bot_id: int = -1
+    bot_name: str = ""
     parent: ParentPage = Field(default_factory=ParentPage)
     name: str = "start"
     ## variables that each user defines in process of the survey

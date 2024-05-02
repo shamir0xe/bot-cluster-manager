@@ -9,11 +9,13 @@ from src.models.page.page import Page
 class Repository(ABC):
     @abstractmethod
     def get_me(self, bot_id: int) -> Bot:
+        """Retrieve informations of the bot with bot_id"""
         pass
 
     @abstractmethod
     @functools.cache
     def get_pages(self, bot_id: int) -> List[Page]:
+        """Get the pages of bot with bot_id"""
         pass
 
     @abstractmethod

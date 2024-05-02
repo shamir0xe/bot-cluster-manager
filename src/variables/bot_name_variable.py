@@ -8,6 +8,4 @@ class BotNameVariable(Variable):
 
     @staticmethod
     def callback(state_data: StateData = StateData.default(), **kwargs) -> str:
-        return Config(base_folder=f"src.bots.bot_{state_data.bot_id}.configs").read(
-            "cfg.name", default="new-bot"
-        )
+        return state_data.bot_name
