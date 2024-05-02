@@ -1,3 +1,5 @@
+output/
+
 # include bots env files
 **/env.json
 
