@@ -17,7 +17,6 @@ class DatabaseRepository(Repository):
         )
         return Bot(**data)
 
-    @functools.lru_cache
     def get_pages(self, bot_id: int) -> List[Page]:
         pages = []
         data = Config(base_folder=f"src.bots.bot_{bot_id}.configs").read(

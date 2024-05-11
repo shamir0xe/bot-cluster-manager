@@ -13,7 +13,6 @@ class Repository(ABC):
         pass
 
     @abstractmethod
-    @functools.cache
     def get_pages(self, bot_id: int) -> List[Page]:
         """Get the pages of bot with bot_id"""
         pass

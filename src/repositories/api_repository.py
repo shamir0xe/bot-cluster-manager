@@ -17,7 +17,6 @@ class ApiRepository(Repository):
             return Bot(**response)
         raise Exception(ExceptionTypes.NETWORK_ERROR)
 
-    @functools.lru_cache
     def get_pages(self, bot_id: int) -> List[Page]:
         response = Network.query(QueryBuilder.get_pages(bot_id=bot_id).build())
         pages = []
