@@ -1,4 +1,3 @@
-import functools
 import json
 from typing import List
 from pylib_0xe.json.json_helper import JsonHelper

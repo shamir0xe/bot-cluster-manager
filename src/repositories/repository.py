@@ -1,5 +1,4 @@
 from abc import ABC, abstractmethod
-import functools
 from typing import List
 
 from src.models.bot.bot import Bot

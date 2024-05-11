@@ -1,4 +1,3 @@
-import functools
 from typing import List
 from src.helpers.config.config import Config
 from src.models.bot.bot import Bot
