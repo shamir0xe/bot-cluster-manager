@@ -6,14 +6,14 @@ from python_graphql_client import GraphqlClient
 from src.actions.network.check_response_got_errors import CheckResponseGotErrors
 from src.actions.network.check_response_need_login import CheckResponseNeedLogin
 from src.actions.network.extract_response_errors import ExtractResponseErrors
-from src.models.network.login_resonse import LoginResponse
-from src.facades.network_config import NetworkConfig
 from src.models.utility.credentials import Credentials
+from src.models.network.login_resonse import LoginResponse
 from src.helpers.builders.query_builder import QueryBuilder
 from src.helpers.decorators.query_wrapper import QueryWrapper
 from src.helpers.decorators.singleton import singleton
-from src.types.query_types import QueryTypes
 from src.facades.env import Env
+from src.facades.network_config import NetworkConfig
+from src.types.query_types import QueryTypes
 
 
 @singleton
