@@ -2,7 +2,7 @@ from enum import Enum
 
 
 class FlowTypes(Enum):
-    """It's the ways users can interact with the bot"""
+    """It's the way users can interact with the bot"""
 
     AUDIO = "audio"
     VIDEO = "video"
